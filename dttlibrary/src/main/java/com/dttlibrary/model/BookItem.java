@@ -11,21 +11,21 @@ public class BookItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // ===== RELATION =====
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    // ===== FIELDS =====
     @Column(nullable = false, unique = true)
     private String barcode;
 
-    // ===== STATUS (ENUM) =====
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     private Status status;
 
     private String location;
+
+    @Column(columnDefinition = "TEXT")
+    private String notes;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -33,7 +33,6 @@ public class BookItem {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // ===== ENUM =====
     public enum Status {
         available,
         borrowed,
@@ -42,7 +41,6 @@ public class BookItem {
         maintenance
     }
 
-    // ===== LIFECYCLE =====
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -56,9 +54,13 @@ public class BookItem {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // ===== GETTERS & SETTERS =====
+    //<editor-fold desc="Getters and Setters">
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Book getBook() {
@@ -77,7 +79,6 @@ public class BookItem {
         this.barcode = barcode;
     }
 
-    // 🔥 METHOD BỊ THIẾU → GÂY LỖI
     public Status getStatus() {
         return status;
     }
@@ -94,11 +95,28 @@ public class BookItem {
         this.location = location;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+    //</editor-fold>
 }

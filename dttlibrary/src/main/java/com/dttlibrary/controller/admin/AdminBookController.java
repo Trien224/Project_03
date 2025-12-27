@@ -1,14 +1,12 @@
 package com.dttlibrary.controller.admin;
 
-import com.dttlibrary.model.*;
-import com.dttlibrary.service.*;
+import com.dttlibrary.model.Book;
+import com.dttlibrary.service.*; // Import all services
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin/books")
@@ -17,22 +15,23 @@ public class AdminBookController {
     private final BookService bookService;
     private final CategoryService categoryService;
     private final AuthorService authorService;
-    private final BookImageService bookImageService;
-    private final FileStorageService fileStorageService;
-    private final BookItemService bookItemService;
+    private final PublisherService publisherService;
+    private final BookItemService bookItemService; // Service để gọi addCopies
 
-    public AdminBookController(BookService bookService,
-                               CategoryService categoryService,
-                               AuthorService authorService,
-                               BookImageService bookImageService,
-                               FileStorageService fileStorageService,
-                               BookItemService bookItemService) {
+    public AdminBookController(BookService bookService, CategoryService categoryService, 
+                               AuthorService authorService, PublisherService publisherService,
+                               BookItemService bookItemService) { // Thêm BookItemService vào constructor
         this.bookService = bookService;
         this.categoryService = categoryService;
         this.authorService = authorService;
-        this.bookImageService = bookImageService;
-        this.fileStorageService = fileStorageService;
-        this.bookItemService = bookItemService;
+        this.publisherService = publisherService;
+        this.bookItemService = bookItemService; // Gán giá trị
+    }
+
+    private void addCategoryAuthorPublisherToModel(Model model) {
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("publishers", publisherService.findAll());
     }
 
     @GetMapping
@@ -44,21 +43,14 @@ public class AdminBookController {
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("book", new Book());
-        model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("authors", authorService.findAll());
+        addCategoryAuthorPublisherToModel(model);
         return "admin/books/form";
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
-        Book book = bookService.findByIdWithItems(id);
-        if (book == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Book not found.");
-            return "redirect:/admin/books";
-        }
-        model.addAttribute("book", book);
-        model.addAttribute("categories", categoryService.findAll());
-        model.addAttribute("authors", authorService.findAll());
+    public String edit(@PathVariable Integer id, Model model) {
+        model.addAttribute("book", bookService.findByIdWithItems(id));
+        addCategoryAuthorPublisherToModel(model);
         return "admin/books/form";
     }
 
@@ -66,98 +58,31 @@ public class AdminBookController {
     public String save(@ModelAttribute Book bookFromForm,
                        @RequestParam Integer categoryId,
                        @RequestParam(required = false) Integer authorId,
+                       @RequestParam(required = false) Integer publisherId,
                        @RequestParam(required = false) MultipartFile image,
-                       @RequestParam(defaultValue = "1") Integer initialQuantity,
+                       @RequestParam(defaultValue = "0") Integer initialQuantity,
                        RedirectAttributes redirectAttributes) {
 
-        boolean isNewBook = bookFromForm.getId() == null;
-
-        try {
-            Book bookToSave = isNewBook ? new Book() : bookService.findById(bookFromForm.getId());
-            if (bookToSave == null) {
-                 throw new RuntimeException("Book not found for update.");
-            }
-
-            bookToSave.setTitle(bookFromForm.getTitle());
-            bookToSave.setDescription(bookFromForm.getDescription());
-            bookToSave.setIsbn(bookFromForm.getIsbn());
-
-            Category category = categoryService.findById(categoryId);
-            bookToSave.setCategory(category);
-
-            if (authorId != null) {
-                Author author = authorService.findById(authorId);
-                bookToSave.setAuthor(author);
-            } else {
-                bookToSave.setAuthor(null);
-            }
-
-            Book savedBook = bookService.save(bookToSave);
-
-            if (isNewBook && initialQuantity > 0) {
-                for (int i = 0; i < initialQuantity; i++) {
-                    BookItem newItem = new BookItem();
-                    newItem.setBook(savedBook);
-                    newItem.setBarcode(savedBook.getIsbn() + "-" + UUID.randomUUID().toString().substring(0, 4));
-                    newItem.setStatus(BookItem.Status.available);
-                    bookItemService.save(newItem);
-                }
-            }
-
-            if (image != null && !image.isEmpty()) {
-                String fileName = fileStorageService.store(image);
-                BookImage img = new BookImage();
-                img.setBook(savedBook);
-                img.setUrl("/uploads/" + fileName);
-                img.setIsPrimary(true);
-                bookImageService.save(img);
-            }
-            
-            redirectAttributes.addFlashAttribute("successMessage", "Book saved successfully.");
-            return "redirect:/admin/books/edit/" + savedBook.getId();
-
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Could not save book: " + e.getMessage());
-            return "redirect:" + (isNewBook ? "/admin/books/create" : "/admin/books/edit/" + bookFromForm.getId());
-        }
+        Book savedBook = bookService.saveAdminBook(bookFromForm, categoryId, authorId, publisherId, image, initialQuantity);
+        redirectAttributes.addFlashAttribute("successMessage", "Book saved successfully.");
+        return "redirect:/admin/books/edit/" + savedBook.getId();
     }
 
-    /**
-     * Thêm nhiều bản sao cho một sách đã có
-     */
     @PostMapping("/add-copies/{bookId}")
     public String addCopies(@PathVariable Integer bookId,
                             @RequestParam(defaultValue = "1") Integer quantityToAdd,
                             RedirectAttributes redirectAttributes) {
-        try {
-            Book book = bookService.findById(bookId);
-            if (book == null) {
-                throw new RuntimeException("Book not found.");
-            }
-            if (quantityToAdd > 0) {
-                for (int i = 0; i < quantityToAdd; i++) {
-                    BookItem newItem = new BookItem();
-                    newItem.setBook(book);
-                    newItem.setBarcode(book.getIsbn() + "-" + UUID.randomUUID().toString().substring(0, 4));
-                    newItem.setStatus(BookItem.Status.available);
-                    bookItemService.save(newItem);
-                }
-                redirectAttributes.addFlashAttribute("successMessage", "Added " + quantityToAdd + " new copies.");
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Could not add copies: " + e.getMessage());
-        }
+        
+        // Gọi phương thức từ đúng service
+        bookItemService.addCopies(bookId, quantityToAdd);
+        redirectAttributes.addFlashAttribute("successMessage", "Added " + quantityToAdd + " new copies.");
         return "redirect:/admin/books/edit/" + bookId;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        try {
-            bookService.delete(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Book deleted successfully.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Could not delete book. It might be in use.");
-        }
+        bookService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Book deleted successfully.");
         return "redirect:/admin/books";
     }
 }

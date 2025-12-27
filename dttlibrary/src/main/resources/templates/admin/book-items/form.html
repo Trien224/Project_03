@@ -1,73 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin | Book Item Form</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="container-fluid">
-    <div class="sidebar">
-        <h4>DTT Library</h4>
-        <a href="/admin">Dashboard</a>
-        <a href="/admin/books">Books</a>
-        <a href="/admin/book-items" class="active">Book Items</a>
-        <a href="/admin/categories">Categories</a>
-        <a href="/admin/authors">Authors</a>
-        <a href="/admin/borrowings">Borrowings</a>
-        <a href="/admin/users">Users</a>
-        <hr>
-        <a href="/logout">Logout</a>
-    </div>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/admin-layout :: layout(title='Book Item Form', content=~{::content})}">
 
-    <div class="content">
-        <h3 th:text="${item.id == null} ? '➕ Add Book Item' : '✏️ Edit Book Item'"></h3>
+<div th:fragment="content">
 
-        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <h3 th:text="${item.id == null} ? '📦 Add New Book Item' : '✏️ Edit Book Item'"></h3>
+
+    <!-- Reusable Messages Fragment -->
+    <div th:replace="~{fragments/common-fragments :: messages}"></div>
+
+    <fieldset style="border: 2px inset white; padding: 15px;">
+        <legend style="font-size: 16px; font-weight: bold; color: navy;">Item Details</legend>
 
         <form th:action="@{/admin/book-items/save}" th:object="${item}" method="post">
             <input type="hidden" th:field="*{id}"/>
 
-            <div class="form-group">
-                <label>Book</label>
-                <select class="form-control" name="bookId" required>
-                    <option value="">-- Select book --</option>
-                    <option th:each="b : ${books}"
-                            th:value="${b.id}"
-                            th:text="${b.title}"
-                            th:selected="${item.book != null and item.book.id == b.id}">
-                    </option>
-                </select>
-            </div>
+            <table>
+                <tr>
+                    <td><label for="bookId">Book:</label></td>
+                    <td>
+                        <select id="bookId" name="bookId" class="form-select" required>
+                            <option value="">-- Select Book --</option>
+                            <option th:each="b : ${books}"
+                                    th:value="${b.id}"
+                                    th:text="${b.title}"
+                                    th:selected="${item.book != null and item.book.id == b.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="barcode">Barcode:</label></td>
+                    <td><input id="barcode" th:field="*{barcode}" class="form-control" required size="40"></td>
+                </tr>
+                <tr>
+                    <td><label for="status">Status:</label></td>
+                    <td>
+                        <select id="status" th:field="*{status}" class="form-select">
+                            <option th:each="s : ${T(com.dttlibrary.model.BookItem.Status).values()}"
+                                    th:value="${s}"
+                                    th:text="${s}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="location">Location:</label></td>
+                    <td><input id="location" th:field="*{location}" class="form-control" size="40"></td>
+                </tr>
+                <tr>
+                    <td valign="top"><label for="notes">Notes:</label></td>
+                    <td><textarea id="notes" th:field="*{notes}" class="form-control" rows="3" cols="38"></textarea></td>
+                </tr>
+            </table>
 
-            <div class="form-group">
-                <label>Barcode</label>
-                <input class="form-control" th:field="*{barcode}" required>
-            </div>
-
-            <div class="form-group">
-                <label>Status</label>
-                <select class="form-control" th:field="*{status}">
-                    <option th:each="s : ${T(com.dttlibrary.model.BookItem.Status).values()}"
-                            th:value="${s}"
-                            th:text="${s}">
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Location</label>
-                <input class="form-control" th:field="*{location}">
-            </div>
-
-            <div>
-                <button type="submit" class="btn btn-primary">💾 Save Item</button>
-                <a href="/admin/book-items" class="btn">Cancel</a>
+            <div style="margin-top: 15px;">
+                <button type="submit" class="btn">Save Item</button>
+                <a th:href="${item.book != null ? '/admin/books/edit/' + item.book.id : '/admin/book-items'}" class="btn">Cancel</a>
             </div>
         </form>
-    </div>
+    </fieldset>
+
 </div>
-</body>
 </html>

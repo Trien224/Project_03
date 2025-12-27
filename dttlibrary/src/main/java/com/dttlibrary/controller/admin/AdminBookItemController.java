@@ -16,8 +16,7 @@ public class AdminBookItemController {
     private final BookItemService itemService;
     private final BookService bookService;
 
-    public AdminBookItemController(BookItemService itemService,
-                                   BookService bookService) {
+    public AdminBookItemController(BookItemService itemService, BookService bookService) {
         this.itemService = itemService;
         this.bookService = bookService;
     }
@@ -33,9 +32,7 @@ public class AdminBookItemController {
         BookItem item = new BookItem();
         if (bookId != null) {
             Book book = bookService.findById(bookId);
-            if (book != null) {
-                item.setBook(book);
-            }
+            item.setBook(book);
         }
         model.addAttribute("item", item);
         model.addAttribute("books", bookService.findAll());
@@ -43,13 +40,8 @@ public class AdminBookItemController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable Integer id, Model model, RedirectAttributes redirectAttributes) {
-        BookItem item = itemService.findById(id);
-        if (item == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Book Item not found.");
-            return "redirect:/admin/book-items";
-        }
-        model.addAttribute("item", item);
+    public String edit(@PathVariable Integer id, Model model) {
+        model.addAttribute("item", itemService.findById(id));
         model.addAttribute("books", bookService.findAll());
         return "admin/book-items/form";
     }
@@ -59,43 +51,22 @@ public class AdminBookItemController {
                        @RequestParam("bookId") Integer bookId,
                        RedirectAttributes redirectAttributes) {
 
-        Book book = bookService.findById(bookId);
-        if (book == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Could not save: Book not found for ID " + bookId);
-            redirectAttributes.addFlashAttribute("item", item);
-            return "redirect:/admin/book-items/create";
-        }
-
-        item.setBook(book);
-
-        if (item.getStatus() == null) {
-            item.setStatus(BookItem.Status.available);
-        }
-
-        try {
-            itemService.save(item);
-            redirectAttributes.addFlashAttribute("successMessage", "Book Item saved successfully.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Could not save book item. Barcode might already exist.");
-            redirectAttributes.addFlashAttribute("item", item);
-            if (item.getId() == null) {
-                return "redirect:/admin/book-items/create?bookId=" + bookId;
-            } else {
-                return "redirect:/admin/book-items/edit/" + item.getId();
-            }
-        }
-        // Chuyển hướng về trang sửa sách gốc
+        itemService.saveAdminItem(item, bookId);
+        redirectAttributes.addFlashAttribute("successMessage", "Book Item saved successfully.");
+        
+        // Chuyển hướng về trang sửa sách gốc để người dùng thấy thay đổi
         return "redirect:/admin/books/edit/" + bookId;
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id, @RequestParam(required = false) Integer bookId, RedirectAttributes redirectAttributes) {
-        try {
-            itemService.delete(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Book Item deleted successfully.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Could not delete book item. It might be in use.");
-        }
+    public String delete(@PathVariable Integer id, 
+                         @RequestParam(required = false) Integer bookId, 
+                         RedirectAttributes redirectAttributes) {
+        
+        itemService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Book Item deleted successfully.");
+
+        // Nếu có bookId, quay lại trang sửa sách. Nếu không, về trang danh sách item.
         if (bookId != null) {
             return "redirect:/admin/books/edit/" + bookId;
         }

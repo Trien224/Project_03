@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/admin-layout :: layout(title='Publisher Management', content=~{::content})}">
+
+<div th:fragment="content">
+
+    <h3>🏢 Publisher Management</h3>
+
+    <div style="text-align: right; margin-bottom: 10px;">
+        <a href="/admin/publishers/create" class="btn">+ Add New Publisher</a>
+    </div>
+
+    <!-- Messages -->
+    <div th:if="${successMessage}" style="color: green; border: 1px solid green; padding: 5px; margin-bottom: 10px;" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" style="color: red; border: 1px solid red; padding: 5px; margin-bottom: 10px;" th:text="${errorMessage}"></div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${publishers}">
+                <td th:text="${p.name}" style="font-weight: bold;">Publisher Name</td>
+                <td align="center">
+                    <a th:href="@{/admin/publishers/edit/{id}(id=${p.id})}" class="btn">Edit</a>
+                    <a th:href="@{/admin/publishers/delete/{id}(id=${p.id})}" class="btn" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</html>

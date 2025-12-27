@@ -2,118 +2,172 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Đăng nhập | DTT Library</title>
-
+    <title>Login - DTT Library</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
+        /* ===== RETRO LOGIN STYLE ===== */
         body {
-            background: linear-gradient(135deg, #0d6efd, #6fbaff);
-            font-family: "Segoe UI", sans-serif;
-            min-height: 100vh;
+            background-color: #008080; /* Teal */
+            font-family: "MS Sans Serif", "Verdana", sans-serif;
+            font-size: 14px;
+        }
+
+        .login-dialog {
+            width: 350px;
+            background-color: #C0C0C0; /* Silver */
+            border: 2px outset white;
+            padding: 3px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.5);
+        }
+
+        .dialog-title-bar {
+            background: navy;
+            color: white;
+            padding: 3px 5px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dialog-title-bar .close-button {
+            background-color: #C0C0C0;
+            border: 1px outset white;
+            color: black;
+            font-family: "MS Sans Serif", sans-serif;
+            font-weight: bold;
+            width: 16px;
+            height: 14px;
+            line-height: 12px;
+            text-align: center;
+        }
+
+        .dialog-content {
+            padding: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
         }
 
-        .login-card {
-            background: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 15px 30px rgba(13, 110, 253, 0.3);
-            width: 380px;
-            padding: 2rem;
+        .dialog-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 20px;
         }
 
-        .login-card h4 {
-            font-weight: 600;
-            color: #0d6efd;
+        .form-group {
+            margin-bottom: 10px;
         }
 
-        .form-control {
-            border-radius: 10px;
-            padding: 0.75rem;
+        .form-group label {
+            display: inline-block;
+            width: 80px;
         }
 
-        .btn-primary {
-            border-radius: 10px;
-            padding: 0.75rem;
-            font-weight: 500;
+        .form-control-retro {
+            border: 2px inset white;
+            background-color: white;
+            padding: 3px;
+            width: calc(100% - 90px);
         }
 
-        .login-logo {
-            width: 60px;
-            margin-bottom: 1rem;
+        .button-pane {
+            text-align: center;
+            margin-top: 20px;
         }
 
-        .text-danger,
-        .text-success {
-            font-size: 0.9rem;
+        .btn-retro {
+            background-color: #C0C0C0;
+            border: 2px outset white;
+            color: black;
+            font-weight: bold;
+            padding: 3px 20px;
+            text-decoration: none;
+            margin: 0 5px;
         }
+
+        .btn-retro:active {
+            border: 2px inset white;
+        }
+
+        .message-box {
+            margin-top: 15px;
+            font-size: 12px;
+            text-align: center;
+        }
+
         .register-link {
-            font-size: 0.9rem;
-            margin-top: 1.5rem;
+            margin-top: 15px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .register-link a {
+            color: blue;
         }
     </style>
 </head>
 
 <body>
 
-<div class="login-card text-center">
+<div class="login-dialog">
+    <!-- Title Bar -->
+    <div class="dialog-title-bar">
+        <span>Enter Password</span>
+        <div class="close-button">X</div>
+    </div>
 
-    <!-- Logo -->
-    <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png"
-         alt="Library Logo"
-         class="login-logo">
+    <!-- Content -->
+    <div class="dialog-content">
+        <img src="https://win98icons.alexmeub.com/icons/png/key_win-4.png" alt="Key Icon" class="dialog-icon">
 
-    <h4 class="mb-4">🔐 Đăng nhập DTT Library</h4>
+        <div style="width: 100%;">
+            <p style="margin-bottom: 15px;">Please enter your username and password to access the DTT Library system.</p>
 
-    <!-- FORM LOGIN -->
-    <form method="post" action="/login" novalidate>
+            <form method="post" action="/login" novalidate>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input id="username" name="username" type="text" class="form-control-retro" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input id="password" name="password" type="password" class="form-control-retro" required>
+                </div>
 
-        <div class="mb-3 text-start">
-            <label class="form-label fw-semibold">Username</label>
-            <input name="username"
-                   class="form-control"
-                   required
-                   placeholder="Nhập tên đăng nhập">
+                <div class="button-pane">
+                    <button type="submit" class="btn-retro">OK</button>
+                    <button type="button" class="btn-retro" onclick="window.location.href='/'">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div style="padding: 0 20px 10px 20px;">
+        <!-- Register Link -->
+        <div class="register-link">
+            Don't have an account? <a href="/register">Click here to register!</a>
         </div>
 
-        <div class="mb-3 text-start">
-            <label class="form-label fw-semibold">Password</label>
-            <input type="password"
-                   name="password"
-                   class="form-control"
-                   required
-                   placeholder="Nhập mật khẩu">
+        <!-- Messages -->
+        <div class="message-box">
+            <div style="color: red;" th:if="${param.error}">
+                <img src="https://win98icons.alexmeub.com/icons/png/msg_error-0.png" width="16" style="vertical-align: middle;">
+                Incorrect username or password.
+            </div>
+            <div style="color: navy;" th:if="${param.logout}">
+                <img src="https://win98icons.alexmeub.com/icons/png/msg_info-4.png" width="16" style="vertical-align: middle;">
+                You have been logged out.
+            </div>
+            <div style="color: navy;" th:if="${param.register_success}">
+                <img src="https://win98icons.alexmeub.com/icons/png/msg_info-4.png" width="16" style="vertical-align: middle;">
+                Registration successful! Please log in.
+            </div>
         </div>
-
-        <button class="btn btn-primary w-100 shadow-sm">
-            Đăng nhập
-        </button>
-    </form>
-
-    <!-- REGISTER LINK -->
-    <div class="register-link">
-        Chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
     </div>
-
-    <!-- ERROR -->
-    <div class="text-danger mt-3" th:if="${param.error}">
-        ⚠️ Sai tài khoản hoặc mật khẩu
-    </div>
-
-    <!-- LOGOUT -->
-    <div class="text-success mt-3" th:if="${param.logout}">
-        ✅ Bạn đã đăng xuất thành công
-    </div>
-
-    <!-- REGISTER SUCCESS -->
-    <div class="text-success mt-3" th:if="${param.register_success}">
-        ✅ Đăng ký thành công! Vui lòng đăng nhập.
-    </div>
-
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,42 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout/user-layout :: layout(
-          title='Chỉnh sửa thông tin',
-          content=~{::content})">
+      th:replace="~{user/../layout/user-layout :: layout(title='Chỉnh sửa thông tin', content=~{::content})}">
 
 <div th:fragment="content">
 
-    <h3 class="text-primary mb-4">✏️ Chỉnh sửa thông tin cá nhân</h3>
+    <h2 style="color: navy; text-align: center; text-decoration: underline; margin-bottom: 20px;">✏️ CHỈNH SỬA THÔNG TIN</h2>
 
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <form th:action="@{/user/profile/update}" th:object="${user}" method="post">
-                <!-- ID và Username là các trường ẩn, không cho sửa -->
-                <input type="hidden" th:field="*{id}" />
-                <input type="hidden" th:field="*{username}" />
+    <fieldset style="border: 1px inset white; padding: 20px;">
+        <legend style="font-size: 16px; font-weight: bold;">Cập nhật thông tin của bạn</legend>
 
-                <div class="mb-3">
-                    <label for="fullName" class="form-label fw-semibold">Họ và tên</label>
-                    <input type="text" id="fullName" class="form-control" th:field="*{fullName}" required>
-                </div>
+        <form th:action="@{/user/profile/update}" th:object="${user}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{username}" />
 
-                <div class="mb-3">
-                    <label for="email" class="form-label fw-semibold">Email</label>
-                    <input type="email" id="email" class="form-control" th:field="*{email}" required>
-                </div>
+            <table cellpadding="5">
+                <tr>
+                    <td width="150"><label for="fullName">Họ và tên:</label></td>
+                    <td><input type="text" id="fullName" th:field="*{fullName}" required size="40" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td><label for="email">Email:</label></td>
+                    <td><input type="email" id="email" th:field="*{email}" required size="40" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td><label for="phone">Số điện thoại:</label></td>
+                    <td><input type="text" id="phone" th:field="*{phone}" size="40" style="border: 1px solid black;"></td>
+                </tr>
+            </table>
 
-                <div class="mb-3">
-                    <label for="phone" class="form-label fw-semibold">Số điện thoại</label>
-                    <input type="text" id="phone" class="form-control" th:field="*{phone}">
-                </div>
+            <hr style="border-top: 1px dashed gray; margin: 20px 0;">
 
-                <div class="d-flex gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
-                    <a th:href="@{/user/profile}" class="btn btn-secondary">Hủy</a>
-                </div>
-            </form>
-        </div>
-    </div>
+            <div>
+                <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
+                <a th:href="@{/user/profile}" class="btn">Hủy</a>
+            </div>
+        </form>
+    </fieldset>
 
 </div>
 </html>

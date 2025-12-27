@@ -1,67 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin | Category Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <style>
-        .form-control:focus {
-            border-color: var(--admin-primary);
-            box-shadow: 0 0 0 0.25rem var(--admin-shadow-color);
-        }
-    </style>
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-2 sidebar">
-            <h4>📚 DTT Library</h4>
-            <a href="/admin">Dashboard</a>
-            <a href="/admin/books">Books</a>
-            <a href="/admin/book-items">Book Items</a>
-            <a href="/admin/categories" class="active">Categories</a>
-            <a href="/admin/borrowings">Borrowings</a>
-            <a href="/admin/users">Users</a>
-            <hr class="text-light">
-            <a href="/logout" class="text-danger fw-semibold">Logout</a>
-        </div>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/admin-layout :: layout(title='Category Form', content=~{::content})}">
 
-        <!-- Main -->
-        <div class="col-md-10 main">
-            <h3 class="page-title mb-4">
-                <span th:if="${category.id == null}">➕ Add Category</span>
-                <span th:if="${category.id != null}">✏️ Edit Category</span>
-            </h3>
+<div th:fragment="content">
 
-            <div class="card">
-                <div class="card-body">
-                    <form th:action="@{/admin/categories/save}"
-                          th:object="${category}"
-                          method="post">
+    <h3 th:text="${category.id == null} ? '➕ Add New Category' : '✏️ Edit Category'"></h3>
 
-                        <input type="hidden" th:field="*{id}"/>
+    <!-- Reusable Messages Fragment -->
+    <div th:replace="~{fragments/common-fragments :: messages}"></div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Name</label>
-                            <input class="form-control" th:field="*{name}" required>
-                        </div>
+    <fieldset style="border: 2px inset white; padding: 15px;">
+        <legend style="font-size: 16px; font-weight: bold; color: navy;">Category Details</legend>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Slug</label>
-                            <input class="form-control" th:field="*{slug}" placeholder="e.g., khoa-hoc-viem-tuong">
-                        </div>
+        <form th:action="@{/admin/categories/save}" th:object="${category}" method="post">
+            <input type="hidden" th:field="*{id}"/>
 
-                        <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">💾 Save</button>
-                            <a href="/admin/categories" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </form>
-                </div>
+            <table>
+                <tr>
+                    <td><label for="name">Name:</label></td>
+                    <td><input id="name" th:field="*{name}" class="form-control" required size="40"></td>
+                </tr>
+                <tr>
+                    <td><label for="slug">Slug:</label></td>
+                    <td><input id="slug" th:field="*{slug}" class="form-control" size="40" placeholder="auto-generated if empty"></td>
+                </tr>
+                <tr>
+                    <td valign="top"><label for="description">Description:</label></td>
+                    <td><textarea id="description" th:field="*{description}" class="form-control" rows="4" cols="38"></textarea></td>
+                </tr>
+            </table>
+
+            <div style="margin-top: 15px;">
+                <button type="submit" class="btn">Save Category</button>
+                <a href="/admin/categories" class="btn">Cancel</a>
             </div>
-        </div>
-    </div>
+        </form>
+    </fieldset>
+
 </div>
-</body>
 </html>

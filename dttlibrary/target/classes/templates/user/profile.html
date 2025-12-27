@@ -1,48 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout/user-layout :: layout(
-          title='Hồ sơ cá nhân',
-          content=~{::content})">
+      th:replace="~{user/../layout/user-layout :: layout(title='Hồ sơ cá nhân', content=~{::content})}">
 
 <div th:fragment="content">
 
-    <h3 class="text-primary mb-4">👤 Hồ sơ cá nhân</h3>
+    <h2 style="color: navy; text-align: center; text-decoration: underline; margin-bottom: 20px;">👤 HỒ SƠ CÁ NHÂN</h2>
 
-    <!-- Success Message -->
-    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+    <!-- Messages -->
+    <div th:if="${successMessage}" style="color: green; border: 1px solid green; padding: 5px; margin-bottom: 10px; background: #e8f5e9;" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" style="color: red; border: 1px solid red; padding: 5px; margin-bottom: 10px; background: #ffebee;" th:text="${errorMessage}"></div>
 
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4" style="max-width:600px">
-            <div class="mb-3">
-                <strong>Họ và tên:</strong>
-                <p class="text-muted" th:text="${user.fullName}"></p>
-            </div>
-            <div class="mb-3">
-                <strong>Email:</strong>
-                <p class="text-muted" th:text="${user.email}"></p>
-            </div>
-            <div class="mb-3">
-                <strong>Số điện thoại:</strong>
-                <p class="text-muted" th:text="${user.phone ?: 'Chưa cập nhật'}"></p>
-            </div>
-            <div class="mb-3">
-                <strong>Tên đăng nhập:</strong>
-                <p class="text-muted" th:text="${user.username}"></p>
-            </div>
+    <fieldset style="border: 1px inset white; padding: 20px;">
+        <legend style="font-size: 16px; font-weight: bold;">Thông tin của bạn</legend>
 
-            <hr>
+        <table cellpadding="5">
+            <tr>
+                <td width="150" valign="top"><strong>Họ và tên:</strong></td>
+                <td th:text="${user.fullName}"></td>
+            </tr>
+            <tr>
+                <td valign="top"><strong>Email:</strong></td>
+                <td th:text="${user.email}"></td>
+            </tr>
+            <tr>
+                <td valign="top"><strong>Số điện thoại:</strong></td>
+                <td th:text="${user.phone ?: 'Chưa cập nhật'}"></td>
+            </tr>
+            <tr>
+                <td valign="top"><strong>Tên đăng nhập:</strong></td>
+                <td th:text="${user.username}"></td>
+            </tr>
+             <tr>
+                <td valign="top"><strong>Trạng thái:</strong></td>
+                <td th:text="${user.status}" style="font-weight: bold; color: green;"></td>
+            </tr>
+        </table>
 
-            <div class="d-flex gap-2 mt-2">
-                <a th:href="@{/user/profile/edit}" class="btn btn-primary">
-                    ✏️ Sửa thông tin
-                </a>
-                <a th:href="@{/user/profile/change-password}" class="btn btn-outline-secondary">
-                    🔑 Đổi mật khẩu
-                </a>
-            </div>
+        <hr style="border-top: 1px dashed gray; margin: 20px 0;">
+
+        <div>
+            <a th:href="@{/user/profile/edit}" class="btn">✏️ Sửa thông tin</a>
+            <a th:href="@{/user/profile/change-password}" class="btn">🔑 Đổi mật khẩu</a>
         </div>
-    </div>
+    </fieldset>
 
 </div>
 </html>

@@ -1,53 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin | Authors</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="container-fluid">
-    <div class="sidebar">
-        <h4>DTT Library</h4>
-        <a href="/admin">Dashboard</a>
-        <a href="/admin/books">Books</a>
-        <a href="/admin/book-items">Book Items</a>
-        <a href="/admin/categories">Categories</a>
-        <a href="/admin/authors" class="active">Authors</a>
-        <a href="/admin/borrowings">Borrowings</a>
-        <a href="/logout">Logout</a>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/admin-layout :: layout(title='Author Management', content=~{::content})}">
+
+<div th:fragment="content">
+
+    <h3>✍️ Author Management</h3>
+
+    <div style="text-align: right; margin-bottom: 10px;">
+        <a href="/admin/authors/create" class="btn">+ Add New Author</a>
     </div>
 
-    <div class="content">
-        <h3>✍️ Author Management</h3>
+    <!-- Reusable Messages Fragment -->
+    <div th:replace="~{fragments/common-fragments :: messages}"></div>
 
-        <div class="mb-3">
-            <a href="/admin/authors/create" class="btn btn-primary">+ Add Author</a>
-        </div>
-
-        <table>
-            <thead>
+    <table class="table">
+        <thead>
             <tr>
                 <th>Name</th>
-                <th>Action</th>
+                <th>Biography</th>
+                <th>Actions</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             <tr th:each="a : ${authors}">
-                <td th:text="${a.name}">Author Name</td>
-                <td>
+                <td th:text="${a.name}" style="font-weight: bold;">Author Name</td>
+                <td th:text="${a.bio != null ? #strings.abbreviate(a.bio, 100) : ''}">Biography snippet...</td>
+                <td align="center">
                     <a th:href="@{/admin/authors/edit/{id}(id=${a.id})}" class="btn">Edit</a>
-                    <a th:href="@{/admin/authors/delete/{id}(id=${a.id})}"
-                       class="btn btn-primary"
-                       onclick="return confirm('Delete author?')">
-                        Delete
-                    </a>
+                    <a th:href="@{/admin/authors/delete/{id}(id=${a.id})}" class="btn" onclick="return confirm('Are you sure?')">Delete</a>
                 </td>
             </tr>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+
 </div>
-</body>
 </html>

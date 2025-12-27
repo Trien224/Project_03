@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <!--
+        Fragment for displaying success and error messages.
+        It checks for flash attributes passed from the controller.
+    -->
+    <th:block th:fragment="messages">
+        <div th:if="${successMessage}"
+             style="color: green; border: 2px solid green; padding: 10px; margin-bottom: 15px; background: #e8f5e9;"
+             th:text="${successMessage}">
+        </div>
+        <div th:if="${errorMessage}"
+             style="color: red; border: 2px solid red; padding: 10px; margin-bottom: 15px; background: #ffebee;"
+             th:text="${errorMessage}">
+        </div>
+    </th:block>
+
+</body>
+</html>

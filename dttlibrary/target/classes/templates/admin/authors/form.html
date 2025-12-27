@@ -1,46 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin | Author Form</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="container-fluid">
-    <div class="sidebar">
-        <h4>DTT Library</h4>
-        <a href="/admin">Dashboard</a>
-        <a href="/admin/books">Books</a>
-        <a href="/admin/book-items">Book Items</a>
-        <a href="/admin/categories">Categories</a>
-        <a href="/admin/authors" class="active">Authors</a>
-        <a href="/admin/borrowings">Borrowings</a>
-        <a href="/logout">Logout</a>
-    </div>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/admin-layout :: layout(title='Author Form', content=~{::content})}">
 
-    <div class="content">
-        <h3>✍️ Author Form</h3>
+<div th:fragment="content">
+
+    <h3 th:text="${author.id == null} ? '✍️ Add New Author' : '✏️ Edit Author'"></h3>
+
+    <!-- Reusable Messages Fragment -->
+    <div th:replace="~{fragments/common-fragments :: messages}"></div>
+
+    <fieldset style="border: 2px inset white; padding: 15px;">
+        <legend style="font-size: 16px; font-weight: bold; color: navy;">Author Details</legend>
 
         <form th:action="@{/admin/authors/save}" th:object="${author}" method="post">
-            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{id}"/>
 
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input id="name" class="form-control" th:field="*{name}" placeholder="Enter author name" required>
-            </div>
+            <table>
+                <tr>
+                    <td><label for="name">Name:</label></td>
+                    <td><input id="name" th:field="*{name}" class="form-control" required size="40"></td>
+                </tr>
+                <tr>
+                    <td valign="top"><label for="bio">Biography:</label></td>
+                    <td><textarea id="bio" th:field="*{bio}" class="form-control" rows="5" cols="38"></textarea></td>
+                </tr>
+            </table>
 
-            <div class="form-group">
-                <label for="bio">Biography</label>
-                <textarea id="bio" class="form-control" th:field="*{bio}" rows="4" placeholder="Short author biography"></textarea>
-            </div>
-
-            <div>
-                <button type="submit" class="btn btn-primary">💾 Save</button>
-                <a class="btn" href="/admin/authors">Cancel</a>
+            <div style="margin-top: 15px;">
+                <button type="submit" class="btn">Save Author</button>
+                <a href="/admin/authors" class="btn">Cancel</a>
             </div>
         </form>
-    </div>
+    </fieldset>
+
 </div>
-</body>
 </html>

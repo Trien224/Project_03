@@ -11,17 +11,14 @@ public class Borrowing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    // ===== USER =====
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // ===== BOOK ITEM =====
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_item_id", nullable = false)
     private BookItem bookItem;
 
-    // ===== DATE =====
     @Column(name = "borrow_date", nullable = false)
     private LocalDateTime borrowDate;
 
@@ -31,12 +28,13 @@ public class Borrowing {
     @Column(name = "return_date")
     private LocalDateTime returnDate;
 
-    // ===== STATUS =====
     @Enumerated(EnumType.STRING)
     @Column(length = 20, nullable = false)
     private Status status;
 
-    // ===== ENUM =====
+    @Column(columnDefinition = "TEXT")
+    private String notes;
+
     public enum Status {
         borrowed,
         returned,
@@ -44,25 +42,69 @@ public class Borrowing {
         lost
     }
 
-    // ===== GETTERS / SETTERS =====
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    //<editor-fold desc="Getters and Setters">
+    public Integer getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public BookItem getBookItem() { return bookItem; }
-    public void setBookItem(BookItem bookItem) { this.bookItem = bookItem; }
+    public User getUser() {
+        return user;
+    }
 
-    public LocalDateTime getBorrowDate() { return borrowDate; }
-    public void setBorrowDate(LocalDateTime borrowDate) { this.borrowDate = borrowDate; }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public LocalDateTime getDueDate() { return dueDate; }
-    public void setDueDate(LocalDateTime dueDate) { this.dueDate = dueDate; }
+    public BookItem getBookItem() {
+        return bookItem;
+    }
 
-    public LocalDateTime getReturnDate() { return returnDate; }
-    public void setReturnDate(LocalDateTime returnDate) { this.returnDate = returnDate; }
+    public void setBookItem(BookItem bookItem) {
+        this.bookItem = bookItem;
+    }
 
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
+    public LocalDateTime getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(LocalDateTime borrowDate) {
+        this.borrowDate = borrowDate;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public LocalDateTime getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDateTime returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+    //</editor-fold>
 }

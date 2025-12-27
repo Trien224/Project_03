@@ -19,69 +19,48 @@ public class UserProfileController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public String profile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        if (userDetails == null) return "redirect:/login";
+    private void addUserToModel(UserDetails userDetails, Model model) {
         User user = userService.findByUsername(userDetails.getUsername());
         model.addAttribute("user", user);
+    }
+
+    @GetMapping
+    public String profile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        addUserToModel(userDetails, model);
         return "user/profile";
     }
 
     @GetMapping("/edit")
     public String editProfileForm(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        if (userDetails == null) return "redirect:/login";
-        User user = userService.findByUsername(userDetails.getUsername());
-        model.addAttribute("user", user);
+        addUserToModel(userDetails, model);
         return "user/edit-profile";
     }
 
     @PostMapping("/update")
-    public String updateProfile(@ModelAttribute User user,
-                                @AuthenticationPrincipal UserDetails userDetails,
-                                RedirectAttributes redirectAttributes) {
-        if (userDetails == null) return "redirect:/login";
-        User currentUser = userService.findByUsername(userDetails.getUsername());
-        currentUser.setFullName(user.getFullName());
-        currentUser.setEmail(user.getEmail());
-        currentUser.setPhone(user.getPhone());
-        userService.update(currentUser);
+    public String updateProfile(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+        userService.updateProfile(user);
         redirectAttributes.addFlashAttribute("successMessage", "Cập nhật thông tin thành công!");
         return "redirect:/user/profile";
     }
 
-    /**
-     * 🔑 HIỂN THỊ FORM ĐỔI MẬT KHẨU
-     * URL: /user/profile/change-password
-     */
     @GetMapping("/change-password")
     public String changePasswordForm() {
         return "user/change-password";
     }
 
-    /**
-     * 💾 XỬ LÝ ĐỔI MẬT KHẨU
-     * URL: /user/profile/change-password
-     */
     @PostMapping("/change-password")
     public String changePassword(@AuthenticationPrincipal UserDetails userDetails,
                                  @RequestParam String currentPassword,
                                  @RequestParam String newPassword,
                                  @RequestParam String confirmPassword,
                                  RedirectAttributes redirectAttributes) {
-        if (userDetails == null) return "redirect:/login";
-
         if (!newPassword.equals(confirmPassword)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Mật khẩu mới và xác nhận mật khẩu không khớp.");
             return "redirect:/user/profile/change-password";
         }
-
-        try {
-            userService.changePassword(userDetails.getUsername(), currentPassword, newPassword);
-            redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công!");
-            return "redirect:/user/profile";
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/user/profile/change-password";
-        }
+        
+        userService.changePassword(userDetails.getUsername(), currentPassword, newPassword);
+        redirectAttributes.addFlashAttribute("successMessage", "Đổi mật khẩu thành công!");
+        return "redirect:/user/profile";
     }
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/admin-layout :: layout(title='Publisher Form', content=~{::content})}">
+
+<div th:fragment="content">
+
+    <h3 th:text="${publisher.id == null} ? '🏢 Add New Publisher' : '✏️ Edit Publisher'"></h3>
+
+    <!-- Messages -->
+    <div th:if="${successMessage}" style="color: green; border: 1px solid green; padding: 5px; margin-bottom: 10px;" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" style="color: red; border: 1px solid red; padding: 5px; margin-bottom: 10px;" th:text="${errorMessage}"></div>
+
+    <fieldset style="border: 2px inset white; padding: 15px;">
+        <legend style="font-size: 16px; font-weight: bold; color: navy;">Publisher Details</legend>
+
+        <form th:action="@{/admin/publishers/save}" th:object="${publisher}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+
+            <table>
+                <tr>
+                    <td><label for="name">Name:</label></td>
+                    <td><input id="name" th:field="*{name}" class="form-control" required size="40"></td>
+                </tr>
+            </table>
+
+            <div style="margin-top: 15px;">
+                <button type="submit" class="btn">Save Publisher</button>
+                <a href="/admin/publishers" class="btn">Cancel</a>
+            </div>
+        </form>
+    </fieldset>
+
+</div>
+</html>

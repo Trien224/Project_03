@@ -18,19 +18,27 @@ public class Book {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private Author author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id")
+    private Publisher publisher;
 
     @Column(length = 50)
     private String isbn;
 
-    private Double price;
     private Integer publishedYear;
+    
+    private Integer numberOfPages;
+    
+    @Column(length = 50)
+    private String language;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -38,15 +46,12 @@ public class Book {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // ===== IMAGES =====
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookImage> images;
 
-    // ===== BOOK ITEMS =====
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // Eager fetch for calculations
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<BookItem> bookItems;
 
-    // ===== LIFECYCLE =====
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -57,22 +62,16 @@ public class Book {
         this.updatedAt = LocalDateTime.now();
     }
     
-    // ===== UTILITY METHODS FOR QUANTITY =====
     public int getTotalItems() {
         return bookItems == null ? 0 : bookItems.size();
     }
 
     public long getAvailableItems() {
-        if (bookItems == null) {
-            return 0;
-        }
-        return bookItems.stream()
-                        .filter(item -> item.getStatus() == BookItem.Status.available)
-                        .count();
+        if (bookItems == null) return 0;
+        return bookItems.stream().filter(item -> item.getStatus() == BookItem.Status.available).count();
     }
 
-    // ===== GETTERS & SETTERS =====
-
+    //<editor-fold desc="Getters and Setters">
     public Integer getId() {
         return id;
     }
@@ -113,20 +112,20 @@ public class Book {
         this.author = author;
     }
 
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+    }
+
     public String getIsbn() {
         return isbn;
     }
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
     }
 
     public Integer getPublishedYear() {
@@ -137,12 +136,36 @@ public class Book {
         this.publishedYear = publishedYear;
     }
 
+    public Integer getNumberOfPages() {
+        return numberOfPages;
+    }
+
+    public void setNumberOfPages(Integer numberOfPages) {
+        this.numberOfPages = numberOfPages;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public List<BookImage> getImages() {
@@ -160,4 +183,5 @@ public class Book {
     public void setBookItems(List<BookItem> bookItems) {
         this.bookItems = bookItems;
     }
+    //</editor-fold>
 }

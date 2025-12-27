@@ -4,6 +4,8 @@ import com.dttlibrary.model.BookItem;
 import com.dttlibrary.model.Borrowing;
 import com.dttlibrary.model.User;
 import com.dttlibrary.repository.BorrowingRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,30 +19,17 @@ public class BorrowingService {
     private final BookItemService bookItemService;
     private final UserService userService;
 
-    public BorrowingService(BorrowingRepository borrowingRepository,
-                            BookItemService bookItemService,
-                            UserService userService) {
+    public BorrowingService(BorrowingRepository borrowingRepository, @Lazy BookItemService bookItemService, @Lazy UserService userService) {
         this.borrowingRepository = borrowingRepository;
         this.bookItemService = bookItemService;
         this.userService = userService;
     }
 
-    // ===== USER =====
+    @Transactional(readOnly = true)
     public List<Borrowing> findByUsername(String username) {
-        return borrowingRepository.findByUserUsername(username);
+        return borrowingRepository.findByUser_UsernameOrderByBorrowDateDesc(username);
     }
 
-    @Transactional(readOnly = true)
-    public List<Borrowing> findByUser(User user) {
-        return borrowingRepository.findByUser(user);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Borrowing> findByUserId(Integer userId) {
-        return borrowingRepository.findByUser_Id(userId);
-    }
-
-    // ===== ADMIN =====
     @Transactional(readOnly = true)
     public List<Borrowing> findAll() {
         return borrowingRepository.findAll();
@@ -49,42 +38,35 @@ public class BorrowingService {
     @Transactional(readOnly = true)
     public Borrowing findById(Integer id) {
         return borrowingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Borrowing not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Borrowing record not found with ID: " + id));
     }
 
-    // ===== BORROW =====
     @Transactional
-    public void borrowBook(Integer bookItemId, Integer userId) {
-
+    public void borrowBook(Integer bookItemId, String username) {
         BookItem item = bookItemService.findById(bookItemId);
-
-        if (item == null || item.getStatus() != BookItem.Status.available) {
-            throw new RuntimeException("Book not available");
+        if (item.getStatus() != BookItem.Status.available) {
+            throw new IllegalStateException("Book is not available for borrowing.");
         }
 
-        User user = userService.findById(userId);
+        User user = userService.findByUsername(username);
 
         Borrowing borrowing = new Borrowing();
         borrowing.setUser(user);
         borrowing.setBookItem(item);
         borrowing.setBorrowDate(LocalDateTime.now());
-        borrowing.setDueDate(LocalDateTime.now().plusDays(7));
+        borrowing.setDueDate(LocalDateTime.now().plusDays(14));
         borrowing.setStatus(Borrowing.Status.borrowed);
-
         borrowingRepository.save(borrowing);
 
         item.setStatus(BookItem.Status.borrowed);
         bookItemService.save(item);
     }
 
-    // ===== RETURN =====
     @Transactional
-    public void returnBook(Integer id) {
-
-        Borrowing borrowing = findById(id);
-
+    public void returnBook(Integer borrowingId) {
+        Borrowing borrowing = findById(borrowingId);
         if (borrowing.getStatus() == Borrowing.Status.returned) {
-            return;
+            throw new IllegalStateException("This book has already been returned.");
         }
 
         borrowing.setStatus(Borrowing.Status.returned);
@@ -96,15 +78,13 @@ public class BorrowingService {
         bookItemService.save(item);
     }
 
-    // ===== DASHBOARD =====
+    @Transactional(readOnly = true)
     public long countBorrowed() {
         return borrowingRepository.countByStatus(Borrowing.Status.borrowed);
     }
 
+    @Transactional(readOnly = true)
     public long countOverdue() {
-        return borrowingRepository.countByStatusAndDueDateBefore(
-                Borrowing.Status.borrowed,
-                LocalDateTime.now()
-        );
+        return borrowingRepository.countByStatusAndDueDateBefore(Borrowing.Status.borrowed, LocalDateTime.now());
     }
 }

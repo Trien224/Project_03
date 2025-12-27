@@ -1,70 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin | Users</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="container-fluid">
-    <div class="sidebar">
-        <h4>DTT Library</h4>
-        <a href="/admin">Dashboard</a>
-        <a href="/admin/books">Books</a>
-        <a href="/admin/book-items">Book Items</a>
-        <a href="/admin/categories">Categories</a>
-        <a href="/admin/authors">Authors</a>
-        <a href="/admin/borrowings">Borrowings</a>
-        <a href="/admin/users" class="active">Users</a>
-        <hr>
-        <a href="/logout">Logout</a>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/admin-layout :: layout(title='User Management', content=~{::content})}">
+
+<div th:fragment="content">
+
+    <h3>👥 User Management</h3>
+
+    <div style="text-align: right; margin-bottom: 10px;">
+        <a href="/admin/users/create" class="btn">+ Add New User</a>
     </div>
 
-    <div class="content">
-        <h3>👤 User Management</h3>
+    <!-- Reusable Messages Fragment -->
+    <div th:replace="~{fragments/common-fragments :: messages}"></div>
 
-        <div class="mb-3">
-            <a href="/admin/users/create" class="btn btn-primary">+ Add User</a>
-        </div>
-
-        <table>
-            <thead>
+    <table class="table">
+        <thead>
             <tr>
                 <th>ID</th>
                 <th>Username</th>
                 <th>Full Name</th>
                 <th>Email</th>
-                <th>Phone</th>
                 <th>Roles</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             <tr th:each="u : ${users}">
                 <td th:text="${u.id}"></td>
-                <td th:text="${u.username}"></td>
+                <td th:text="${u.username}" style="font-weight: bold;"></td>
                 <td th:text="${u.fullName}"></td>
                 <td th:text="${u.email}"></td>
-                <td th:text="${u.phone}"></td>
                 <td>
                     <span th:each="r : ${u.roles}"
-                          class="badge"
-                          th:text="${r.roleName}">
+                          th:text="${r.roleName}"
+                          style="background: navy; color: white; padding: 2px 4px; margin-right: 2px;">
                     </span>
                 </td>
-                <td>
+                <td align="center">
                     <a th:href="@{/admin/users/edit/{id}(id=${u.id})}" class="btn">Edit</a>
-                    <a th:href="@{/admin/users/delete/{id}(id=${u.id})}"
-                       class="btn btn-primary"
-                       onclick="return confirm('Delete user?')">
-                        Delete
-                    </a>
+                    <a th:href="@{/admin/users/delete/{id}(id=${u.id})}" class="btn" onclick="return confirm('Are you sure?')">Delete</a>
                 </td>
             </tr>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+
 </div>
-</body>
 </html>

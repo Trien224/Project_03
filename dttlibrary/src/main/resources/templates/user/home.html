@@ -1,57 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Trang chủ</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout/user-layout :: layout(
+          title='Trang chủ',
+          content=~{::content})">
 
-<div th:replace="~{layout/header :: header}"></div>
+<div th:fragment="content">
 
-<div class="container-fluid">
-    <div class="content">
-        <section class="hero">
-            <h1>Chào mừng đến với DTT Library</h1>
-            <p>Khám phá kho tri thức – mượn sách dễ dàng, nhanh chóng.</p>
-            <a th:href="@{/user/books}" class="btn btn-primary">
-                📚 Xem sách
-            </a>
-        </section>
-
-        <section class="my-5">
-            <h3>📖 Sách mới</h3>
-            <div class="row">
-                <div class="col-md-3" th:each="book : ${newBooks}">
-                    <div class="card book-card">
-                        <img th:if="${book.images != null and !book.images.isEmpty()}"
-                             th:src="@{${book.images[0].url}}"
-                             class="img-fluid">
-                        <h6 th:text="${book.title}"></h6>
-                        <small class="text-muted">
-                            Tác giả:
-                            <span th:text="${book.author != null ? book.author.name : 'N/A'}"></span>
-                        </small>
-                        <a th:href="@{/user/books/{id}(id=${book.id})}"
-                           class="btn btn-sm">
-                            Xem chi tiết
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="my-5">
-            <h3>📚 Thể loại</h3>
-            <div class="row">
-                <div class="col-md-3" th:each="c : ${categories}">
-                    <div class="category-item" th:text="${c.name}"></div>
-                </div>
-            </div>
-        </section>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: navy; text-decoration: underline;">SÁCH MỚI NHẤT</h2>
+        <p>Những cuốn sách vừa được cập nhật trong thư viện của chúng tôi!</p>
     </div>
-</div>
 
-</body>
+    <!-- SÁCH MỚI -->
+    <table border="1" cellpadding="5" cellspacing="0" width="100%" style="background: white; border-color: black;">
+        <tr>
+            <td th:each="book : ${newBooks}" align="center" valign="top" width="25%">
+                <a th:href="@{/user/books/{id}(id=${book.id})}">
+                    <img th:if="${book.images != null and !book.images.isEmpty()}"
+                         th:src="@{${book.images[0].url}}"
+                         width="100" height="150" style="border: 1px solid black; object-fit: cover;">
+                    <img th:if="${book.images == null or book.images.isEmpty()}"
+                         src="https://via.placeholder.com/100x150?text=No+Image"
+                         width="100" height="150" style="border: 1px solid black;">
+                </a>
+                <br>
+                <a th:href="@{/user/books/{id}(id=${book.id})}" style="font-size: 14px; font-weight: bold;" th:text="${book.title}">
+                    Book Title
+                </a>
+                <br>
+                <small th:if="${book.author != null}" th:text="${book.author.name}">Author Name</small>
+            </td>
+        </tr>
+    </table>
+
+    <hr style="border-top: 2px dashed navy; margin: 25px 0;">
+
+    <!-- THỂ LOẠI -->
+    <div style="text-align: center; margin-bottom: 15px;">
+        <h2 style="color: navy; text-decoration: underline;">KHÁM PHÁ THEO THỂ LOẠI</h2>
+    </div>
+
+    <div style="background: white; border: 2px inset white; padding: 15px; text-align: center;">
+        <th:block th:each="c, iter : ${categories}">
+            <a th:href="@{/user/books/category/{slug}(slug=${c.slug})}"
+               style="font-size: 16px; font-weight: bold; margin: 5px 10px; display: inline-block;"
+               th:text="${c.name}">
+                Category Name
+            </a>
+            <span th:if="${!iter.last}"> | </span>
+        </th:block>
+    </div>
+
+</div>
 </html>

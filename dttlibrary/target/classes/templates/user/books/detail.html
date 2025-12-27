@@ -1,56 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout/user-layout :: layout(
-          title=${book.title},
-          content=~{::content})">
+      th:replace="~{user/../layout/user-layout :: layout(title=${book.title}, content=~{::content})}">
 
 <div th:fragment="content">
 
-    <div class="row">
-        <div class="col-md-4">
-             <img th:if="${primaryImage != null}"
-                  th:src="@{${primaryImage.url}}"
-                  class="img-fluid rounded shadow-lg w-100"
-                  style="border-radius: 18px !important;">
-             <img th:if="${primaryImage == null}"
-                  src="https://via.placeholder.com/300x450?text=No+Image"
-                  class="img-fluid rounded shadow-lg w-100"
-                  style="border-radius: 18px !important;">
-        </div>
+    <h2 style="color: navy; text-align: center; text-decoration: underline; margin-bottom: 20px;" th:text="${book.title}"></h2>
 
-        <div class="col-md-8 ps-lg-5">
-            <h2 class="text-primary mb-3" th:text="${book.title}"></h2>
+    <table width="100%" cellpadding="10">
+        <tr>
+            <td width="35%" valign="top" align="center">
+                <!-- Book Cover -->
+                <img th:if="${primaryImage != null}"
+                     th:src="@{${primaryImage.url}}"
+                     width="200" style="border: 2px outset white;">
+                <img th:if="${primaryImage == null}"
+                     src="https://via.placeholder.com/200x300?text=No+Image"
+                     width="200" style="border: 2px outset white;">
 
-            <p><b>Tác giả:</b> <span th:text="${book.author?.name ?: 'N/A'}"></span></p>
-            <p><b>Thể loại:</b> <span th:text="${book.category?.name ?: 'N/A'}"></span></p>
-            <p><b>Năm xuất bản:</b> <span th:text="${book.publishedYear}"></span></p>
-            <p><b>ISBN:</b> <span th:text="${book.isbn}"></span></p>
+                <hr style="border-top: 1px dashed gray; margin: 15px 0;">
 
-            <hr class="my-4">
+                <!-- Borrowing Section -->
+                <div style="border: 1px solid gray; padding: 10px; background: #D3D3D3;">
+                    <p style="margin: 0; font-weight: bold;">Số lượng còn lại:
+                        <span th:text="${available}" style="color: green; font-size: 18px;"></span>
+                    </p>
+                    <div style="margin-top: 10px;">
+                        <div th:if="${available > 0 and availableItem != null}">
+                            <form th:action="@{/borrowings/borrow}" method="post">
+                                <input type="hidden" name="bookItemId" th:value="${availableItem.id}" />
+                                <button type="submit" class="btn btn-primary">📖 Mượn sách ngay</button>
+                            </form>
+                        </div>
+                        <div th:if="${available == 0}">
+                            <button class="btn" disabled>❌ Hết sách</button>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td width="65%" valign="top" style="font-size: 14px;">
+                <!-- Book Details -->
+                <fieldset style="border: 1px inset white; padding: 15px;">
+                    <legend style="font-size: 16px; font-weight: bold;">Thông tin chi tiết</legend>
+                    <p><b>Tác giả:</b> <span th:text="${book.author?.name ?: 'N/A'}"></span></p>
+                    <p><b>Thể loại:</b> <span th:text="${book.category?.name ?: 'N/A'}"></span></p>
+                    <p><b>Nhà xuất bản:</b> <span th:text="${book.publisher?.name ?: 'N/A'}"></span></p>
+                    <p><b>Năm xuất bản:</b> <span th:text="${book.publishedYear ?: 'N/A'}"></span></p>
+                    <p><b>Số trang:</b> <span th:text="${book.numberOfPages ?: 'N/A'}"></span></p>
+                    <p><b>Ngôn ngữ:</b> <span th:text="${book.language ?: 'N/A'}"></span></p>
+                    <p><b>ISBN:</b> <span th:text="${book.isbn ?: 'N/A'}"></span></p>
+                </fieldset>
 
-            <div class="alert alert-info">
-                <strong>Số lượng còn lại:</strong>
-                <span th:text="${available}" class="fw-bold fs-5 text-success"></span>
-            </div>
+                <br>
 
-            <div th:if="${available > 0 && availableItem != null}">
-                <form th:action="@{/borrowings/borrow}" method="post">
-                    <input type="hidden" name="bookItemId" th:value="${availableItem.id}" />
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        📖 Mượn sách ngay
-                    </button>
-                </form>
-            </div>
+                <fieldset style="border: 1px inset white; padding: 15px;">
+                    <legend style="font-size: 16px; font-weight: bold;">Mô tả</legend>
+                    <p th:text="${book.description ?: 'Chưa có mô tả.'}" style="text-align: justify;"></p>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
 
-            <div th:if="${available == 0}">
-                <button class="btn btn-secondary btn-lg" disabled>
-                    ❌ Hết sách
-                </button>
-            </div>
-
-            <h5 class="mt-5 text-primary">Mô tả</h5>
-            <p class="mt-3" th:text="${book.description}"></p>
-        </div>
+    <hr style="border-top: 2px solid navy; margin: 20px 0;">
+    <div style="text-align: center;">
+        <a href="javascript:history.back()" class="btn">⬅️ Quay lại</a>
+        <a th:href="@{/user/books}" class="btn">📚 Xem tất cả sách</a>
     </div>
 
 </div>
