@@ -6,21 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="48148bef-e284-43df-af99-cc8d6abe4e31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dttlibrary/controller/admin/AdminBookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dttlibrary/controller/admin/AdminBookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dttlibrary/controller/admin/AdminBookItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dttlibrary/controller/admin/AdminBookItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dttlibrary/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dttlibrary/model/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dttlibrary/repository/BookRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dttlibrary/repository/BookRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dttlibrary/service/BookItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dttlibrary/service/BookItemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/dttlibrary/service/BookService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/dttlibrary/service/BookService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/books/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/books/form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/books/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/books/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/user/books/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/user/books/detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/dttlibrary/controller/admin/AdminBookController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/dttlibrary/controller/admin/AdminBookController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/dttlibrary/controller/admin/AdminBookItemController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/dttlibrary/controller/admin/AdminBookItemController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/dttlibrary/repository/BookRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/dttlibrary/repository/BookRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/books/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/books/form.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/books/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/books/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/user/books/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/user/books/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/authors/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/authors/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/authors/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/authors/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/book-items/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/book-items/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/books/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/books/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/users/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/users/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/users/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/users/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/books/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/books/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/layout/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/layout/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/user/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/user/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/authors/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/authors/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/authors/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/authors/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/book-items/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/book-items/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/books/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/books/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/users/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/users/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/users/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/users/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/books/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/books/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/layout/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/layout/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/user/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/user/home.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

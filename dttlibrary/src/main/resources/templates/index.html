@@ -3,161 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>DTT Library</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --primary-color: #0077ff;
-            --primary-light: #4da3ff;
-            --background-color: #f0f4f8;
-            --card-bg-color: #ffffff;
-            --text-color: #333;
-            --heading-color: #0056b3;
-            --shadow-color: rgba(0, 119, 255, 0.15);
-        }
-
-        body {
-            background-color: var(--background-color);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-color);
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,.08);
-        }
-
-        .navbar-brand {
-            color: var(--primary-color) !important;
-        }
-
-        .hero {
-            padding: 80px 0;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-weight: 700;
-            color: var(--heading-color);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #555;
-        }
-
-        .book-card {
-            background-color: var(--card-bg-color);
-            border-radius: 18px;
-            border: none;
-            box-shadow: 0 10px 25px var(--shadow-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .book-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0, 119, 255, 0.2);
-        }
-
-        .btn {
-            border-radius: 8px;
-            font-weight: 500;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .btn-primary {
-            background-image: linear-gradient(to right, var(--primary-light), var(--primary-color));
-            border: none;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px var(--shadow-color);
-        }
-
-        footer {
-            background: var(--primary-color);
-            color: #fff;
-            margin-top: 60px;
-            padding: 20px 0;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar navbar-expand-lg sticky-top">
-    <div class="container">
-        <a class="navbar-brand fw-bold" th:href="@{/}">
-            📘 DTT Library
-        </a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}">Trang chủ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/books}">Sách</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-primary ms-2" th:href="@{/login}">
-                        Đăng nhập
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{layout/header :: header}"></div>
 
-<!-- ===== HERO ===== -->
-<section class="hero">
-    <div class="container">
-        <h1>📘 DTT Library</h1>
-        <p>Kho tri thức mở – mượn sách dễ dàng, nhanh chóng</p>
-        <div class="mt-4">
-            <a th:href="@{/books}" class="btn btn-primary btn-lg me-2">
-                📚 Xem Toàn Bộ Sách
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- ===== SÁCH MỚI ===== -->
-<section class="container my-5">
-    <h3 class="mb-4 text-primary">📖 Sách mới</h3>
-    <div class="row g-4">
-        <div class="col-md-3" th:each="book : ${newBooks}">
-            <div class="card book-card p-3 h-100">
-                <img th:if="${book.images != null and !book.images.isEmpty()}"
-                     th:src="@{${book.images[0].url}}"
-                     class="img-fluid mb-3"
-                     style="height:160px;object-fit:cover;border-radius:12px">
-                <h6 th:text="${book.title}"></h6>
-                <small class="text-muted" th:if="${book.author != null}">
-                    Tác giả: <span th:text="${book.author.name}"></span>
-                </small>
-                <a th:href="@{/books/{id}(id=${book.id})}"
-                   class="btn btn-sm btn-outline-primary mt-2">
-                    Xem chi tiết
+<div class="container-fluid">
+    <div class="content">
+        <section class="hero">
+            <h1>📘 DTT Library</h1>
+            <p>Kho tri thức mở – mượn sách dễ dàng, nhanh chóng</p>
+            <div class="mt-4">
+                <a th:href="@{/books}" class="btn btn-primary">
+                    📚 Xem Toàn Bộ Sách
                 </a>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<!-- ===== FOOTER ===== -->
-<footer class="py-4">
+        <section class="my-5">
+            <h3 class="mb-4">📖 Sách mới</h3>
+            <div class="row">
+                <div class="col-md-3" th:each="book : ${newBooks}">
+                    <div class="card book-card">
+                        <img th:if="${book.images != null and !book.images.isEmpty()}"
+                             th:src="@{${book.images[0].url}}"
+                             class="img-fluid">
+                        <h6 th:text="${book.title}"></h6>
+                        <small class="text-muted" th:if="${book.author != null}">
+                            Tác giả: <span th:text="${book.author.name}"></span>
+                        </small>
+                        <a th:href="@{/books/{id}(id=${book.id})}"
+                           class="btn btn-sm">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<footer>
     <div class="container text-center">
-        <p class="mb-1">© 2025 DTT Library</p>
+        <p>© 2025 DTT Library</p>
         <small>Email: contact@dttlibrary.vn | Phone: 0123 456 789</small>
     </div>
 </footer>

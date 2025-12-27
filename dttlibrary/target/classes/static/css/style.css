@@ -1,18 +1,104 @@
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            min-height: 100vh;
-            background: #343a40;
-        }
-        .sidebar a {
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            padding: 10px 15px;
-        }
-        .sidebar a:hover {
-            background: #495057;
-        }
-    </style>
+body {
+    background-color: #87CEEB; /* Sky Blue */
+    font-family: "Courier New", Courier, monospace;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #FFF;
+    border: 2px solid #000;
+}
+
+.header {
+    background-color: #FF0000; /* Red */
+    color: #FFF;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px solid #000;
+}
+
+.header h1 {
+    margin: 0;
+    font-family: "Press Start 2P", cursive; /* A pixel font, if available */
+}
+
+.sidebar {
+    min-height: 100vh;
+    background: #FF0000; /* Red */
+    padding: 10px;
+    border-right: 2px solid #000;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: #c00;
+    border: 1px solid #000;
+}
+
+.sidebar a:hover {
+    background: #900;
+}
+
+.content {
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #FF0000; /* Red */
+    color: #FFF;
+}
+
+.btn {
+    background-color: #FF0000; /* Red */
+    color: #FFF;
+    border: 1px solid #000;
+    padding: 5px 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #FF0000; /* Red */
+}
+
+.btn:hover {
+    background-color: #c00;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #000;
+    box-sizing: border-box;
+}
+
+/* Details view */
+.detail-container {
+    border: 1px solid #000;
+    padding: 15px;
+    background-color: #f0f0f0;
+}

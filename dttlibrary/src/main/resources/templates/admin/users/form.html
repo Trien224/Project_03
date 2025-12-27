@@ -3,74 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin | User Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <style>
-        .form-control:focus {
-            border-color: var(--admin-primary);
-            box-shadow: 0 0 0 0.25rem var(--admin-shadow-color);
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-2 sidebar">
-            <h4>📚 DTT Library</h4>
-            <a href="/admin">Dashboard</a>
-            <a href="/admin/books">Books</a>
-            <a href="/admin/book-items">Book Items</a>
-            <a href="/admin/categories">Categories</a>
-            <a href="/admin/borrowings">Borrowings</a>
-            <a href="/admin/users" class="active">Users</a>
-            <hr class="text-light">
-            <a href="/logout" class="text-danger fw-semibold">Logout</a>
-        </div>
+    <div class="sidebar">
+        <h4>DTT Library</h4>
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/books">Books</a>
+        <a href="/admin/book-items">Book Items</a>
+        <a href="/admin/categories">Categories</a>
+        <a href="/admin/authors">Authors</a>
+        <a href="/admin/borrowings">Borrowings</a>
+        <a href="/admin/users" class="active">Users</a>
+        <hr>
+        <a href="/logout">Logout</a>
+    </div>
 
-        <!-- Main -->
-        <div class="col-md-10 main">
-            <h3 class="page-title mb-4" th:text="${user.id == null} ? '➕ Add User' : '✏️ Edit User'"></h3>
+    <div class="content">
+        <h3 th:text="${user.id == null} ? '➕ Add User' : '✏️ Edit User'"></h3>
 
-            <div class="card">
-                <div class="card-body">
-                    <form th:action="@{/admin/users/save}" th:object="${user}" method="post">
-                        <input type="hidden" th:field="*{id}"/>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Username</label>
-                                <input class="form-control" th:field="*{username}" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Password</label>
-                                <input type="password" class="form-control" th:field="*{password}" th:placeholder="${user.id == null} ? 'Required' : 'Leave blank to keep current'" />
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Full Name</label>
-                            <input class="form-control" th:field="*{fullName}">
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Email</label>
-                                <input class="form-control" th:field="*{email}">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">Phone</label>
-                                <input class="form-control" th:field="*{phone}">
-                            </div>
-                        </div>
-
-                        <!-- Role selection can be added here if needed -->
-
-                        <div class="d-flex gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">💾 Save User</button>
-                            <a href="/admin/users" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </form>
-                </div>
+        <form th:action="@{/admin/users/save}" th:object="${user}" method="post">
+            <input type="hidden" th:field="*{id}"/>
+            <div class="form-group">
+                <label>Username</label>
+                <input class="form-control" th:field="*{username}" required>
             </div>
-        </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" th:field="*{password}" th:placeholder="${user.id == null} ? 'Required' : 'Leave blank to keep current'" />
+            </div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input class="form-control" th:field="*{fullName}">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input class="form-control" th:field="*{email}">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input class="form-control" th:field="*{phone}">
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">💾 Save User</button>
+                <a href="/admin/users" class="btn">Cancel</a>
+            </div>
+        </form>
     </div>
 </div>
 </body>

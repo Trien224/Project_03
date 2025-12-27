@@ -1,77 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout/user-layout :: layout(
-          title='Trang chủ',
-          content=~{::content})">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
 
-<div th:fragment="content">
+<div th:replace="~{layout/header :: header}"></div>
 
-    <!-- ===== HERO ===== -->
-    <section class="hero mb-5">
-        <div class="row align-items-center">
+<div class="container-fluid">
+    <div class="content">
+        <section class="hero">
+            <h1>Chào mừng đến với DTT Library</h1>
+            <p>Khám phá kho tri thức – mượn sách dễ dàng, nhanh chóng.</p>
+            <a th:href="@{/user/books}" class="btn btn-primary">
+                📚 Xem sách
+            </a>
+        </section>
 
-            <div class="col-md-6">
-                <h1 class="fw-bold text-primary">
-                    Chào mừng đến với DTT Library
-                </h1>
-                <p class="text-muted">
-                    Khám phá kho tri thức – mượn sách dễ dàng, nhanh chóng.
-                </p>
-
-                <a th:href="@{/user/books}" class="btn btn-primary btn-lg me-2">
-                    📚 Xem sách
-                </a>
-            </div>
-
-            <div class="col-md-6 text-center">
-                <img th:src="@{/uploads/hero.png}"
-                     class="img-fluid"
-                     style="max-height:300px"
-                     alt="Library">
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ===== SÁCH MỚI ===== -->
-    <section class="mb-5">
-        <h3 class="mb-4 text-primary">📖 Sách mới</h3>
-
-        <div class="row g-4">
-            <div class="col-md-3" th:each="book : ${newBooks}">
-                <div class="card book-card p-3 h-100">
-
-                    <img th:if="${book.images != null and !book.images.isEmpty()}"
-                         th:src="@{${book.images[0].url}}"
-                         class="img-fluid mb-3"
-                         style="height:160px;object-fit:cover;border-radius:12px">
-
-                    <h6 th:text="${book.title}"></h6>
-
-                    <small class="text-muted">
-                        Tác giả:
-                        <span th:text="${book.author != null ? book.author.name : 'N/A'}"></span>
-                    </small>
-
-                    <a th:href="@{/user/books/{id}(id=${book.id})}"
-                       class="btn btn-sm btn-outline-primary mt-2">
-                        Xem chi tiết
-                    </a>
+        <section class="my-5">
+            <h3>📖 Sách mới</h3>
+            <div class="row">
+                <div class="col-md-3" th:each="book : ${newBooks}">
+                    <div class="card book-card">
+                        <img th:if="${book.images != null and !book.images.isEmpty()}"
+                             th:src="@{${book.images[0].url}}"
+                             class="img-fluid">
+                        <h6 th:text="${book.title}"></h6>
+                        <small class="text-muted">
+                            Tác giả:
+                            <span th:text="${book.author != null ? book.author.name : 'N/A'}"></span>
+                        </small>
+                        <a th:href="@{/user/books/{id}(id=${book.id})}"
+                           class="btn btn-sm">
+                            Xem chi tiết
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- ===== THỂ LOẠI ===== -->
-    <section class="mb-5">
-        <h3 class="mb-4 text-primary">📚 Thể loại</h3>
-
-        <div class="row g-4">
-            <div class="col-md-3" th:each="c : ${categories}">
-                <div class="category-item" th:text="${c.name}"></div>
+        <section class="my-5">
+            <h3>📚 Thể loại</h3>
+            <div class="row">
+                <div class="col-md-3" th:each="c : ${categories}">
+                    <div class="category-item" th:text="${c.name}"></div>
+                </div>
             </div>
-        </div>
-    </section>
-
+        </section>
+    </div>
 </div>
+
+</body>
 </html>
